@@ -1,0 +1,58 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  height: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: #ffffff;
+  height: 100%;
+}
+
+a {
+  text-decoration: none;
+}
+
+#root {
+  height: 100%;
+}
+
+.ql-font-Roboto {
+  font-family: "Roboto", sans-serif;
+}
+
+.ql-font-BlackHanSans {
+  font-family: "Black Han Sans", sans-serif;
+}
+
+.ql-font-NotoSansKR {
+  font-family: "Noto Sans KR", sans-serif;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* 일정관리 스케줄러 css */
+[class |= "MuiTable-root"] + div > div {
+  height: 100px !important;
+  top: -31px;
+}
+[class |= "MuiToolbar-root"] + div {
+  overflow-y: hidden !important;
+}
+.css-1dlyelz-MuiButtonBase-root-MuiToggleButton-root.Mui-selected { /* local 환경일때 */
+  background-color: #70ffb3 !important;
+}
+.css-nkgpnu.Mui-selected {  /* dev, prod 환경일때 */
+  background-color: #70ffb3 !important;
+}
+/* 일정관리 스케줄러 css */

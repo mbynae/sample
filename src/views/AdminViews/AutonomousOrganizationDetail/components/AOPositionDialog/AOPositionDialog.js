@@ -1,0 +1,262 @@
+import React, { useState } from "react";
+import clsx                from "clsx";
+import * as MC             from "@material-ui/core";
+import * as MS             from "@material-ui/styles";
+import * as MI             from "@material-ui/icons";
+
+import { aoPositionRepository } from "../../../../../repositories";
+import { AlertDialog }          from "../../../../../components";
+
+const useStyles = MS.makeStyles(theme => ({
+	aoPositionsLayout: {
+		backgroundColor: theme.palette.background.paper
+	},
+	margin:            {
+		margin: theme.spacing(1)
+	},
+	listItemLayout:    {
+		paddingRight: 96
+	}
+}));
+
+const AOPositionDialog = props => {
+	const classes = useStyles();
+	
+	const { aoPositions, setAOPositions, autonomousOrganizationId, getAOPositions, open, onClose } = props;
+	const [aoPositionName, setAOPositionName] = useState("");
+	const [scroll, setScroll] = React.useState("paper");
+	
+	const handleChange = (event) => {
+		setAOPositionName(event.target.value);
+	};
+	
+	const handleSaveAOPosition = () => {
+		aoPositionRepository.saveAOPosition({
+			autonomousOrganizationId: autonomousOrganizationId,
+			name:                     aoPositionName,
+			sequence:                 aoPositions.length + 1
+		}).then(result => {
+			handleAlertToggle(
+				"isOpen",
+				"직책 등록 완료",
+				`직책 "${aoPositionName}" 을(를) 등록 완료 하였습니다.`,
+				() => {
+					getAOPositions();
+					setAOPositionName("");
+					setAlertOpens({ ...alertOpens, isOpen: false });
+				}
+			);
+		});
+	};
+	
+	const handleUpdateAOPosition = (aoPosition) => {
+		aoPositionRepository
+			.updateAOPosition(aoPosition.id, {
+				...aoPosition
+			})
+			.then(result => {
+				handleAlertToggle(
+					"isOpen",
+					"직책 수정 완료",
+					`직책 "${aoPosition.name}" 을(를) 수정 완료 하였습니다.`,
+					() => {
+						getAOPositions();
+						setAlertOpens({ ...alertOpens, isOpen: false });
+					}
+				);
+			});
+	};
+	
+	const handleDeleteAOPosition = (id) => {
+		let aoPosition = aoPositions.find(obj => obj.id === id);
+		if ( aoPosition.count > 0 ) {
+			handleAlertToggle(
+				"isOpen",
+				"직책 삭제 불가",
+				`"${aoPositions.find(obj => obj.id === id).name}" 직책에 등록된 게시글이 있습니다. \n(수정만 가능)`,
+				() => {
+					getAOPositions();
+					setAlertOpens({ ...alertOpens, isOpen: false });
+				}
+			);
+		} else {
+			handleAlertToggle(
+				"isConfirmOpen",
+				"직책 삭제",
+				`직책 "${aoPositions.find(obj => obj.id === id).name}" 을(를) 정말로 삭제 하겠습니까?`,
+				() => {
+					setAlertOpens({ ...alertOpens, isConfirmOpen: false });
+					aoPositionRepository
+						.removeAOPosition(id)
+						.then(result => {
+							handleAlertToggle(
+								"isOpen",
+								"직책 삭제 완료",
+								`직책 "${aoPositions.find(obj => obj.id === id).name}" 을(를) 삭제 완료 하였습니다.`,
+								() => {
+									getAOPositions();
+									setAlertOpens({ ...alertOpens, isOpen: false });
+								}
+							);
+						});
+				},
+				() => {
+					setAlertOpens({ ...alertOpens, isConfirmOpen: false });
+				}
+			);
+		}
+	};
+	
+	const [alertOpens, setAlertOpens] = useState({
+		isConfirmOpen: false,
+		isOpen:        false,
+		title:         "",
+		content:       "",
+		yesFn:         () => handleAlertToggle(),
+		noFn:          () => handleAlertToggle()
+	});
+	const handleAlertToggle = (key, title, content, yesCallback, noCallback) => {
+		setAlertOpens(
+			prev => {
+				return {
+					...prev,
+					title,
+					content,
+					[key]: !alertOpens[key],
+					yesFn: () => yesCallback(),
+					noFn:  () => noCallback()
+				};
+			}
+		);
+	};
+	
+	return (
+		<MC.Dialog
+			open={open}
+			onClose={onClose}
+			disableBackdropClick={true}
+			scroll={scroll}
+			aria-labelledby="form-aoPosition-dialog-title">
+			<MC.DialogTitle id="form-aoPosition-dialog-title">
+				{/*<MC.Typography variant={"h4"}>*/}
+				직책 관리
+				{/*</MC.Typography>*/}
+			</MC.DialogTitle>
+			<MC.DialogContent dividers={scroll === "paper"}>
+				
+				<MC.Grid container spacing={1}>
+					<MC.Grid item xs={12} md={12}>
+						<div className={classes.aoPositionsLayout}>
+							<MC.List>
+								{
+									aoPositions && aoPositions.length > 0 ? aoPositions.map((groups, index) => (
+											<MC.ListItem key={index} className={classes.listItemLayout}>
+												
+												<MC.FormControl fullWidth className={clsx(classes.margin, classes.textField)}>
+													<MC.Input
+														id={`aoPosition-update-basic-${index}`}
+														type={"text"}
+														value={groups.aoPosition.name}
+														startAdornment={
+															<MC.InputAdornment position="start">
+																<MC.Typography variant={"h5"}>
+																	{index + 1}
+																</MC.Typography>
+															</MC.InputAdornment>
+														}
+														onChange={(event) => {
+															let value = event.target.value;
+															setAOPositions(prev => {
+																const which = ct => ct.aoPosition.id === groups.aoPosition.id;
+																let index = prev.findIndex(which);
+																let temp = prev.find(which);
+																temp.aoPosition.name = value;
+																prev[index] = temp;
+																return [
+																	...prev
+																];
+															});
+														}}
+													/>
+												</MC.FormControl>
+												
+												<MC.ListItemSecondaryAction>
+													<MC.IconButton
+														edge="end"
+														aria-label="edit"
+														onClick={() => handleUpdateAOPosition(groups.aoPosition)}>
+														<MI.Edit />
+													</MC.IconButton>
+													
+													<MC.IconButton
+														edge="end"
+														aria-label="delete"
+														onClick={() => handleDeleteAOPosition(groups.aoPosition.id)}>
+														<MI.Delete />
+													</MC.IconButton>
+												</MC.ListItemSecondaryAction>
+											</MC.ListItem>
+										))
+										:
+										(
+											<MC.ListItem>
+												<MC.ListItemText primary="등록 된 직책이 없습니다." />
+											</MC.ListItem>
+										)
+								}
+							
+							</MC.List>
+						</div>
+					</MC.Grid>
+					<MC.Grid item xs={12} md={12}>
+						<MC.FormControl fullWidth className={clsx(classes.margin, classes.textField)}>
+							<MC.InputLabel htmlFor="aoPosition-basic">직책명</MC.InputLabel>
+							<MC.Input
+								id="aoPosition-basic"
+								type={"text"}
+								value={aoPositionName}
+								onChange={handleChange}
+								endAdornment={
+									<MC.InputAdornment position="end">
+										<MC.IconButton
+											aria-label="toggle password visibility"
+											onClick={() => {
+												handleSaveAOPosition();
+											}}
+										>
+											<MI.PlaylistAdd />
+										</MC.IconButton>
+									</MC.InputAdornment>
+								}
+							/>
+						</MC.FormControl>
+					</MC.Grid>
+				</MC.Grid>
+			
+			</MC.DialogContent>
+			<MC.DialogActions>
+				<MC.Button onClick={onClose}>
+					닫기
+				</MC.Button>
+			</MC.DialogActions>
+			
+			<AlertDialog
+				isOpen={alertOpens.isOpen}
+				title={alertOpens.title}
+				content={alertOpens.content}
+				handleYes={() => alertOpens.yesFn()}
+			/>
+			
+			<AlertDialog
+				isOpen={alertOpens.isConfirmOpen}
+				title={alertOpens.title}
+				content={alertOpens.content}
+				handleYes={() => alertOpens.yesFn()}
+				handleNo={() => alertOpens.noFn()}
+			/>
+		
+		</MC.Dialog>
+	);
+};
+
+export default AOPositionDialog;

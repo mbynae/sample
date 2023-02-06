@@ -1,0 +1,60 @@
+name: NODE
+
+on:
+  push:
+    branches:
+      - community
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ 14.x ]
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2.1.1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+            node-version: ${{ matrix.node-version }}
+      - name: Install deps
+        run: npm i
+      - name: Build Devel
+        run: |
+          npm run build-dev
+          mv build build-devel
+      - name: Build Prod
+        run: |
+          npm run build-production
+          mv build build-prod
+      - name: Build Docker
+        run: |
+          docker build --target=DEVEL -t lms-user-web:devel .
+          docker build --target=PROD -t lms-user-web:prod .
+      - name: Publish Image to ECR
+        run: |
+          DOCKER_TAG=$(git rev-parse --short "$GITHUB_SHA")
+          aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin 070976870339.dkr.ecr.ap-northeast-2.amazonaws.com
+          docker tag lms-user-web:devel 070976870339.dkr.ecr.ap-northeast-2.amazonaws.com/lms-cmmty-user-web:devel-$DOCKER_TAG
+          docker tag lms-user-web:prod 070976870339.dkr.ecr.ap-northeast-2.amazonaws.com/lms-cmmty-user-web:prod-$DOCKER_TAG
+          docker push 070976870339.dkr.ecr.ap-northeast-2.amazonaws.com/lms-cmmty-user-web:devel-$DOCKER_TAG
+          docker push 070976870339.dkr.ecr.ap-northeast-2.amazonaws.com/lms-cmmty-user-web:prod-$DOCKER_TAG
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.MIGO_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.MIGO_AWS_SECRET_ACCESS_KEY }}
+
+  eks:
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: k8s
+        run: |
+          DOCKER_TAG=$(git rev-parse --short "$GITHUB_SHA")
+          aws eks update-kubeconfig --name MIGO --region ap-northeast-2
+          kubectl set image -n lms-cmmty-dev deployment/lms-user-web lms-user-web=070976870339.dkr.ecr.ap-northeast-2.amazonaws.com/lms-cmmty-user-web:devel-$DOCKER_TAG
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.MIGO_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.MIGO_AWS_SECRET_ACCESS_KEY }}

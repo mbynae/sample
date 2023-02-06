@@ -1,0 +1,125 @@
+{
+  "name": "lms-user-web",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@date-io/date-fns": "1.x",
+    "@date-io/moment": "1.x",
+    "@devexpress/dx-react-core": "^2.7.6",
+    "@devexpress/dx-react-scheduler": "^2.7.6",
+    "@devexpress/dx-react-scheduler-material-ui": "^2.7.6",
+    "@emotion/react": "^11.5.0",
+    "@emotion/styled": "^11.3.0",
+    "@material-ui/core": "^4.2.1",
+    "@material-ui/icons": "^4.2.1",
+    "@material-ui/lab": "^4.0.0-alpha.57",
+    "@material-ui/pickers": "^3.2.10",
+    "@material-ui/styles": "^4.2.1",
+    "@mui/material": "^5.0.4",
+    "@react-hook/window-size": "^3.0.7",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "chart.js": "^2.9.3",
+    "clsx": "^1.1.0",
+    "date-fns": "^2.27.0",
+    "env-cmd": "^10.1.0",
+    "filesize": "^6.1.0",
+    "history": "^4.10.1",
+    "iconv-lite": "^0.6.2",
+    "immutability-helper": "^3.1.1",
+    "mobx": "^5.15.4",
+    "mobx-persist": "^0.4.1",
+    "mobx-react": "^6.2.2",
+    "moment": "^2.26.0",
+    "moment-timezone": "^0.5.31",
+    "prop-types": "^15.7.2",
+    "query-string": "^7.0.1",
+    "quill": "^2.0.0-dev.3",
+    "quill-better-table": "^1.2.10",
+    "quill-blot-formatter": "^1.0.5",
+    "quill-html-edit-button": "^1.1.2",
+    "react": "^16.13.1",
+    "react-beautiful-dnd": "^13.0.0",
+    "react-chartjs-2": "^2.9.0",
+    "react-cookie": "^4.0.3",
+    "react-countdown-hook": "^1.0.3",
+    "react-datasheet": "^1.4.8",
+    "react-daum-postcode": "^2.0.2",
+    "react-device-detect": "^1.15.0",
+    "react-dom": "^16.13.1",
+    "react-dropzone": "^11.2.4",
+    "react-ellipsis-text": "^1.2.1",
+    "react-export-excel": "^0.5.3",
+    "react-helmet": "^6.1.0",
+    "react-lines-ellipsis": "^0.14.1",
+    "react-moment": "^0.9.7",
+    "react-naver-maps": "^0.0.13",
+    "react-new-window": "^0.1.2",
+    "react-number-format": "^4.4.1",
+    "react-perfect-scrollbar": "^1.5.8",
+    "react-router-dom": "^5.2.0",
+    "react-router-last-location": "^2.0.1",
+    "react-scripts": "3.4.1",
+    "react-slideshow-image": "^3.4.3",
+    "react-sortable-tree": "^2.8.0",
+    "react-text-mask": "^5.4.3",
+    "react-window": "^1.8.6",
+    "recompose": "^0.30.0",
+    "underscore": "^1.10.2",
+    "uuid": "^8.1.0",
+    "validate.js": "^0.13.1",
+    "xlsx": "^0.16.9"
+  },
+  "scripts": {
+    "start": "env-cmd -f .local.env react-app-rewired start",
+    "build": "react-app-rewired build",
+    "build-dev": "env-cmd -f .dev.env react-app-rewired build",
+    "build-production": "env-cmd -f .production.env react-app-rewired build",
+    "test": "react-app-rewired test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-proposal-decorators": "^7.8.3",
+    "babel-eslint": "^10.1.0",
+    "core-decorators": "^0.20.0",
+    "customize-cra": "^0.9.1",
+    "react-app-rewired": "^2.1.6",
+    "sass": "^1.55.0"
+  },
+  "babel": {
+    "presets": [
+      "react-app"
+    ],
+    "plugins": [
+      [
+        "@babel/plugin-proposal-decorators",
+        {
+          "legacy": true
+        }
+      ],
+      [
+        "@babel/plugin-proposal-class-properties",
+        {
+          "loose": true
+        }
+      ]
+    ]
+  }
+}

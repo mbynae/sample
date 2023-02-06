@@ -1,0 +1,9 @@
+export { default as MyInfo } from "./MyInfo";
+export { default as MyManagementFee } from "./MyManagementFee";
+export { default as MyArticles } from "./MyArticles";
+export { default as ResidentCard } from "./ResidentCard";
+export { default as MyPageTabs } from "./MyPageTabs";
+export { default as MyReservationHistory } from "./MyReservationHistory";
+export { default as MyReservationCancelHistory } from "./MyReservationCancelHistory";
+export { default as PayFeeInfo } from "./PayFeeInfo";
+export { default as NoteList } from "./NoteList";

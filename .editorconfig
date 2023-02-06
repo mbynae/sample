@@ -1,0 +1,47 @@
+root = true
+
+[*]
+charset = utf-8
+ij_visual_guides = 80,120
+
+[*.js]
+# common
+indent_size = 2
+indent_style = tab
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# 따옴표
+ij_html_enforce_quotes = true
+ij_html_quote_style = double
+ij_javascript_use_double_quotes = true
+ij_javascript_force_quote_style = true
+
+# 공백
+ij_any_spaces_around_additive_operators = true
+ij_any_spaces_around_assignment_operators = true
+ij_any_spaces_around_equality_operators = true
+ij_any_spaces_within_braces = true
+ij_javascript_spaces_within_imports = true
+ij_javascript_space_before_try_left_brace = true
+ij_javascript_space_before_catch_left_brace = true
+ij_javascript_spaces_within_object_literal_braces = true
+# ij_any_spaces_within_brackets = true
+
+# align
+ij_javascript_align_imports = true
+ij_javascript_align_union_types = true
+
+# 세미콜론
+ij_javascript_force_semicolon_style = true
+
+# brace
+ij_javascript_for_brace_force = always
+ij_javascript_if_brace_force = always
+ij_javascript_space_before_else_left_brace = true
+ij_javascript_while_brace_force = always
+ij_javascript_function_expression_brace_style = end_of_line
+ij_javascript_method_brace_style = end_of_line
+ij_javascript_block_brace_style = end_of_line
+ij_javascript_class_brace_style = end_of_line
+
