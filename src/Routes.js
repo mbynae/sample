@@ -1163,8 +1163,8 @@ const Routes = () => {
 			{/*루트 입력 시 urbanlt 홈페이지 이동*/}
 			<Route
 				exact
-				path="/"
-				render={() => (window.location = "https://www.urbanlt.co.kr/")}
+				path="/hobanpg"
+				// render={() => (window.location = "https://www.urbanlt.co.kr/")}
 			/>
 
 			<Route path={"/:aptComplexId/admin"} component={AdminRoute} />
@@ -1174,9 +1174,11 @@ const Routes = () => {
 				component={NotFoundView}
 				exact
 				layout={AdminViewMinimalLayout}
-				path={`/all/not-found`}
+				// path={`/all/not-found`}
+				path={`/hobanpg/dashboard`}
 			/>
-			<Redirect to={`/all/not-found`} />
+			{/* <Redirect to={`/all/not-found`} /> */}
+			<Redirect to={`/hobanpg/dashboard`} />
 		</Switch>
 	);
 };
